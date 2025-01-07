@@ -1,47 +1,31 @@
 import { StyleSheet } from "react-native";
+import * as Location from "expo-location";
 import MapLibreGL from "@maplibre/maplibre-react-native";
 import { Camera, MapView, MapViewRef } from "@maplibre/maplibre-react-native";
-import * as Location from "expo-location";
 import { Ref, useEffect, useState } from "react";
 
-import { CenteredContainer } from "./CenteredContainer";
-import { ThemedText } from "../components/ThemedText";
 import { MAPTILER_API_KEY } from "../core/config";
 import { MAPTILER_STYLE_URL } from "../core/constants";
+import { setCurrentLocationIfAvailable } from "../core/locationUtils";
+import { LoadingText } from "./LoadingText";
 
 interface NativeMapViewProps {
   mapRef?: Ref<MapViewRef>;
 }
 
 export const NativeMapView = (props: NativeMapViewProps) => {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] =
+    useState<Location.LocationObjectCoords | null>(null);
   const [isLocationUnavailable, setIsLocationUnavailable] = useState(false);
 
   useEffect(() => {
     MapLibreGL.setAccessToken(null);
 
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setIsLocationUnavailable(true);
-        return;
-      }
-
-      try {
-        const currentLocation = await Location.getCurrentPositionAsync({});
-        setLocation(currentLocation.coords);
-      } catch (_e) {
-        setIsLocationUnavailable(true);
-      }
-    })();
+    setCurrentLocationIfAvailable(setLocation, setIsLocationUnavailable);
   }, []);
 
   if (!location && !isLocationUnavailable) {
-    return (
-      <CenteredContainer>
-        <ThemedText>Loading...</ThemedText>
-      </CenteredContainer>
-    );
+    return <LoadingText />;
   }
 
   return (

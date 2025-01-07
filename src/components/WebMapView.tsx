@@ -2,42 +2,26 @@ import { Ref, useEffect, useState } from "react";
 import Map, { MapRef } from "react-map-gl/maplibre";
 import * as Location from "expo-location";
 
-import { CenteredContainer } from "./CenteredContainer";
-import { ThemedText } from "./ThemedText";
 import { MAPTILER_API_KEY } from "../core/config";
 import { MAPTILER_STYLE_URL } from "../core/constants";
+import { setCurrentLocationIfAvailable } from "../core/locationUtils";
+import { LoadingText } from "./LoadingText";
 
 interface WebMapViewProps {
   mapRef?: Ref<MapRef>;
 }
 
 export const WebMapView = (props: WebMapViewProps) => {
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] =
+    useState<Location.LocationObjectCoords | null>(null);
   const [isLocationUnavailable, setIsLocationUnavailable] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setIsLocationUnavailable(true);
-        return;
-      }
-
-      try {
-        const currentLocation = await Location.getCurrentPositionAsync({});
-        setLocation(currentLocation.coords);
-      } catch (_e) {
-        setIsLocationUnavailable(true);
-      }
-    })();
+    setCurrentLocationIfAvailable(setLocation, setIsLocationUnavailable);
   }, []);
 
   if (!location && !isLocationUnavailable) {
-    return (
-      <CenteredContainer>
-        <ThemedText>Loading...</ThemedText>
-      </CenteredContainer>
-    );
+    return <LoadingText />;
   }
 
   return (
