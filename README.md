@@ -2,6 +2,8 @@
 
 Demo React Native / Expo app that has both a native and a web version of a MapLibre powered map.
 
+For a detailed guide of how this demo was implemented, see the blog article [Getting MapLibre working for both native and web in Expo](https://greenash.net.au/thoughts/2025/01/getting-maplibre-working-for-both-native-and-web-in-expo/).
+
 ![Expo MapLibre native + web demo screenshot](./assets/images/expo-maplibre-native-plus-web-demo-screenshot.jpg?raw=true)
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
