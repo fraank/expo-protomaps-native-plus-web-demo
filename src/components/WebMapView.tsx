@@ -1,11 +1,12 @@
 import { Ref, useEffect, useState } from "react";
 import Map, { MapRef } from "react-map-gl/maplibre";
 import * as Location from "expo-location";
+import maplibregl from "maplibre-gl";
+import { Protocol } from "pmtiles";
 
-import { MAPTILER_API_KEY } from "../core/config";
-import { MAPTILER_STYLE_URL } from "../core/constants";
 import { setCurrentLocationIfAvailable } from "../core/locationUtils";
 import { LoadingText } from "./LoadingText";
+import { mapStyle } from "../core/map";
 
 interface WebMapViewProps {
   mapRef?: Ref<MapRef>;
@@ -18,6 +19,14 @@ export const WebMapView = (props: WebMapViewProps) => {
 
   useEffect(() => {
     setCurrentLocationIfAvailable(setLocation, setIsLocationUnavailable);
+
+    // Register pmtiles protocol
+    const protocol = new Protocol();
+    maplibregl.addProtocol("pmtiles", protocol.tile);
+
+    return () => {
+      maplibregl.removeProtocol("pmtiles");
+    };
   }, []);
 
   if (!location && !isLocationUnavailable) {
@@ -32,11 +41,12 @@ export const WebMapView = (props: WebMapViewProps) => {
         longitude: location ? location.longitude : 0,
         zoom: location ? 12 : 2,
       }}
-      style={{ width: "100%", height: "100%" }}
-      mapStyle={MAPTILER_STYLE_URL.replace(
-        "MAPTILER_API_KEY",
-        MAPTILER_API_KEY,
-      )}
+      style={{
+        width: "100%",
+        height: "100%"
+      }}
+      mapStyle={mapStyle}
+      mapLib={maplibregl}
     />
   );
 };

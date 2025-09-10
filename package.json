@@ -19,6 +19,7 @@
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
     "@maplibre/maplibre-react-native": "^10.0.0-alpha.28",
+    "@protomaps/basemaps": "^5.5.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "expo": "~53.0.0",
@@ -36,6 +37,7 @@
     "expo-system-ui": "~5.0.11",
     "expo-web-browser": "~14.2.0",
     "maplibre-gl": "^4.7.1",
+    "pmtiles": "^4.3.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-map-gl": "^7.1.8",

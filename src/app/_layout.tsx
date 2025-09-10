@@ -11,16 +11,16 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "../hooks/useColorScheme";
-import { MAPTILER_API_KEY } from "../core/config";
+import { PMTILES_URL } from "../core/config";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  if (!MAPTILER_API_KEY) {
+  if (!PMTILES_URL) {
     throw new Error(
-      "Missing required config value MAPTILER_API_KEY, please add " +
-        "EXPO_PUBLIC_MAPTILER_API_KEY to a .env file or set it as an " +
+      "Missing required config value PMTILES_URL, please add " +
+        "EXPO_PUBLIC_PMTILES_URL to a .env file or set it as an " +
         "environment variable",
     );
   }
